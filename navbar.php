@@ -2,8 +2,9 @@
 //Display guest welcome message, Login and Registration links
 //when shopper has yet to login,
 $content1 = "Welcome Guest<br />";
+// href='register.php'
 $content2 = "<li class='nav-item'>
-             <a class='nav-link' href='register.php'>Sign Up</a></li>
+             <a class='nav-link' >Sign Up</a></li>
              <li class='nav-item'>
              <a class='nav-link' href='login.php'>Login</a></li>";
 

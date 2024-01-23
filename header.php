@@ -18,8 +18,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <a href="index.php">
-                    <img src="" alt="Logo" class="img-fluid" style="width: 100%"/>
-
+                    <!-- Banner logo -->
+                    <img src="Pictures/logo.png" alt="Logo" class="img-fluid" style="display:block;margin-left:auto;margin-right:auto;width:50%;"/>
                 </a>
             </div>
         </div>

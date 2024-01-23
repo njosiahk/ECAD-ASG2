@@ -1,12 +1,12 @@
 <?php
 //Connection parameters
 $servername = 'localhost';
-$username = 'main';
+$username = 'root';
 $userpwd = '';
 $dbname = 'asg 1';
 
 //Create connection
-$conn = new mysqli($servername,$username,$userpwd,$dbname)
+$conn = new mysqli($servername,$username,$userpwd,$dbname);
 
 //Check connection
 if($conn->connect_error){

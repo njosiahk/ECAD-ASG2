@@ -7,6 +7,8 @@
     <title>LION CITY LUSH</title>
     <!-- latest compiled and minified CSS-->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/mdb.min.css">
+
     <!-- Link to compiled Bootstrap JavaScript download-->
     <script src="js/bootstrap.bundle.min.js"></script>
     <!-- Site specific Cascading Stylesheet-->

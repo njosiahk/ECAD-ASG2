@@ -26,21 +26,21 @@ if ($result->num_rows > 0)
         $_SESSION["ShopperName"] = $row['Name'];
         $_SESSION["ShopperID"] = $row['ShopperID'];
 
-        // $qry = "Select sc.ShopCartID,COUNT(sci.ProductID) as NumItems 
-        // from ShopCart sc inner join ShopCartItem sci 
-        // on sc.ShopCartID=sci.ShopCartID 
-        // where sc.OrderPlaced = 0 and sc.ShopperID = ?";
+        $qry = "Select sc.ShopCartID,COUNT(sci.ProductID) as NumItems 
+        from ShopCart sc inner join ShopCartItem sci 
+        on sc.ShopCartID=sci.ShopCartID 
+        where sc.OrderPlaced = 0 and sc.ShopperID = ?";
         
-        // $stmt = $conn->prepare($qry);
-        // $stmt->bind_param('i', $_SESSION["ShopperID"]);
-        // $stmt->execute();
-        // $result2 = $stmt->get_result();
-        // $stmt->close();
-        // if ($result2->num_rows > 0) {
-        //     $row2 = $result2->fetch_assoc();
-        //     $_SESSION["NumCartItem"] = $row2['NumItems'];
-        //     $_SESSION["Cart"]=$row2['ShopCartID'];
-        // }
+        $stmt = $conn->prepare($qry);
+        $stmt->bind_param('i', $_SESSION["ShopperID"]);
+        $stmt->execute();
+        $result2 = $stmt->get_result();
+        $stmt->close();
+        if ($result2->num_rows > 0) {
+            $row2 = $result2->fetch_assoc();
+            $_SESSION["NumCartItem"] = $row2['NumItems'];
+            $_SESSION["Cart"]=$row2['ShopCartID'];
+        }
         $conn->close();
         header("Location: index.php");
         exit;

@@ -6,10 +6,27 @@ include_once("mysql_conn.php");
 
 if($_POST) //Post Data received from Shopping cart page.
 {
-	// To Do 6 (DIY): Check to ensure each product item saved in the associative
-	//                array is not out of stock
+	//Check to ensure each product item saved in the associative array is not out of stock
+	//and quantity to check if the quantity ordered is not more than quantity in stock 
+	foreach ($_SESSION['Items'] as $key => $item) {
+		$productId = $item['productId'];
+		$quantityOrdered = $item['quantity'];
 	
-	// End of To Do 6
+		// Retrieve current inventory level from database, using the correct column name
+		$stmt = $conn->prepare("SELECT Quantity as Inventory FROM Product WHERE ProductID = ?");
+		$stmt->bind_param("i", $productId);
+		$stmt->execute();
+		$stmt->bind_result($inventory);
+		$stmt->fetch();
+		$stmt->close();
+	
+		if ($inventory < $quantityOrdered) {
+			// Product is out of stock
+			$_SESSION['error'] = "Product " . $item['name'] . " is out of stock. Please adjust your quantity.";
+			header("Location: shoppingCart.php"); // Redirect to shopping cart with error message
+			exit;
+		}
+	}
 	
 	$paypal_data = '';
 	// Get all items from the shopping cart, concatenate to the variable $paypal_data
@@ -20,15 +37,37 @@ if($_POST) //Post Data received from Shopping cart page.
 	  	$paypal_data .= '&L_PAYMENTREQUEST_0_NAME'.$key.'='.urlencode($item["name"]);
 		$paypal_data .= '&L_PAYMENTREQUEST_0_NUMBER'.$key.'='.urlencode($item["productId"]);
 	}
-	
 
-	/*
-	// To Do 1A: Compute GST amount 7% for Singapore, round the figure to 2 decimal places
-	$_SESSION["Tax"] = round($_SESSION["SubTotal"]*0.09,2);
-	// To Do 1B: Compute Shipping charge - S$2.00 per trip
-	$_SESSION["ShipCharge"]=2.00;	
-	*/
-	
+	//DELIVERY CALCULATION
+	// 1. Retrieve selected delivery option
+	$deliveryOption = $_POST['deliveryOption'] ?? 'regular';
+
+	// 2. Calculate shipping charge based on selected option
+	switch ($deliveryOption) {
+		case 'regular':
+			$_SESSION["ShipCharge"] = 5.00;
+			break;
+		case 'express':
+			$_SESSION["ShipCharge"] = 10.00;
+			break;
+		default:
+			// Handle any unexpected delivery options
+			$_SESSION["ShipCharge"] = 0;
+			// developing an error message or redirecting
+	}
+
+	//TAX CALCULATION
+	// 1. Retrieve current GST rate from the database
+	$stmt = $conn->prepare("SELECT TaxRate FROM GST WHERE GstId = (SELECT MAX(GstId) FROM GST)");
+	$stmt->execute();
+	$stmt->bind_result($gstRate);
+	$stmt->fetch();
+	$stmt->close();
+
+	// 2. Calculate tax amount
+	$_SESSION["Tax"] = $_SESSION["SubTotal"] * $gstRate;
+
+
 	//Data to be sent to PayPal
 	$padata = '&CURRENCYCODE='.urlencode($PayPalCurrencyCode).
 			  '&PAYMENTACTION=Sale'.
@@ -113,12 +152,21 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 	if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || 
 	   "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
 	{
-		// To Do 5 (DIY): Update stock inventory in product table 
-		//                after successful checkout
-		
-		// End of To Do 5
+		// Update stock inventory in product table 
+		// after successful checkout
+		foreach ($_SESSION['Items'] as $item) {
+			$productId = $item['productId'];
+			$quantityOrdered = $item['quantity'];
 	
-		// To Do 2: Update shopcart table, close the shopping cart (OrderPlaced=1)
+			// Update inventory in the product table
+			$qry = "UPDATE products SET Inventory = Inventory - ? WHERE ProductID = ?";
+			$stmt = $conn->prepare($qry);
+			$stmt->bind_param("ii", $quantityOrdered, $productId);
+			$stmt->execute();
+			$stmt->close();
+		}
+	
+		//Update shopcart table, close the shopping cart (OrderPlaced=1)
 		$total = $_SESSION["SubTotal"] + $_SESSION["Tax"] + $_SESSION["ShipCharge"];
 		$qry = "UPDATE shopcart SET OrderPlaced=1, Quantity=?,
 				SubTotal=?, ShipCharge=?, Tax=?, Total=?
@@ -131,7 +179,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 						  $_SESSION["Cart"]);
 		$stmt->execute();
 		$stmt->close();
-		// End of To Do 2
+		
 		
 		//We need to execute the "GetTransactionDetails" API Call at this point 
 		//to get customer details
@@ -166,8 +214,8 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			
 			$ShipEmail = urldecode($httpParsedResponseAr["EMAIL"]);			
 			
-			// To Do 3: Insert an Order record with shipping information
-			//          Get the Order ID and save it in session variable.
+			// Insert an Order record with shipping information
+			// Get the Order ID and save it in session variable.
 			$qry = "INSERT INTO orderdata (ShipName, ShipAddress, ShipCountry,
 										   ShipEmail, ShopCartID)
 					VALUES(?, ?, ?, ?, ?)";
@@ -181,17 +229,17 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			$result = $conn->query($qry);
 			$row = $result->fetch_array();
 			$_SESSION["OrderID"] = $row["OrderID"];
-			// End of To Do 3
+			
 				
 			$conn->close();
 				  
-			// To Do 4A: Reset the "Number of Items in Cart" session variable to zero.
+			//Reset the "Number of Items in Cart" session variable to zero.
 			$_SESSION["NumCartItem"]=0;
 	  		
-			// To Do 4B: Clear the session variable that contains Shopping Cart ID.
+			//Clear the session variable that contains Shopping Cart ID.
 			unset($_SESSION["Cart"]);
 			
-			// To Do 4C: Redirect shopper to the order confirmed page.
+			//Redirect shopper to the order confirmed page.
 			header("Location: orderConfirmed.php");
 			exit;
 		} 

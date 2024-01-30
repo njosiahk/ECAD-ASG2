@@ -84,8 +84,17 @@ if (isset($_SESSION["Cart"])) {
         // Display the subtotal at the end of the shopping cart
             echo "<p style ='text-align:right;font-size:20px'> Subtotal: S$". number_format($subTotal,2);
             $_SESSION["SubTotal"]=round($subTotal,2);
+
+        // Display delivery options
+        echo "<h4 style='text-align:right; margin-bottom: 10px;'>Choose Delivery Option:</h4>";
+        echo "<div style='text-align:right;'>";
+        echo "<label for='deliveryExpress'><input type='radio' id='deliveryExpress' name='deliveryOption' value='express' checked> Express (S$10)</label><br>";
+        echo "<label for='deliveryRegular'><input type='radio' id='deliveryRegular' name='deliveryOption' value='regular'> Regular (S$5)</label>";
+        echo "</div>";
+
         // Add PayPal Checkout button on the shopping cart page
-        echo "<form method='post' action=''>";
+        echo "<form method='post' action='checkoutProcess.php'>";
+        echo "<input type='hidden' name='deliveryOption' value=''>"; // store delivery option
         echo "<input type='image' style='float:right;'src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";
         echo "</form></p>";
                 

@@ -49,7 +49,9 @@ if(isset($_SESSION["ShopperName"])) {
                 </div>
             </div>
             <div class="container px-0">
-              <h5 class="navbar-nav mx-auto"><?php echo $content1 ?></h5>
+              <nav class="navbar navbar-light bg-white navbar-expand-xl">
+                <h5 class="navbar-nav mx-auto"><?php echo $content1 ?></h5>
+              </nav>
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">

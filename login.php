@@ -14,6 +14,7 @@ include("header.php");
             <span class="page-title">Member Login</span>
         </div>
     </div>
+    </br>
     <!-- 2nd row - Entry of email address  -->
     <div class="mb3 row">
         <label class="col-sm-3 col-form-label" for="email">
@@ -23,6 +24,7 @@ include("header.php");
             <input class="form-control" type="email" name="email" id="email" required />
         </div>
     </div>
+    </br>
     <!-- 3rd row - Entry of password  -->
     <div class="mb3 row">
         <label class="col-sm-3 col-form-label" for="password">
@@ -32,6 +34,7 @@ include("header.php");
             <input class="form-control" type="password" name="password" id="password" required />
         </div>
     </div>
+    </br>
     <!-- 4th row - Login Button  -->
     <div class="mb3 row">
         <div class="col-sm-9 offset-sm-3">

@@ -72,7 +72,9 @@ if(isset($_SESSION["ShopperName"])) {
                                 <i class="fa fa-shopping-bag fa-2x"></i>
                                 <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;"><?php echo $_SESSION["NumCartItem"] ?></span>
                             </a>
-                            
+                            <a href="login.php" class="my-auto">
+                                <i class="fas fa-user fa-2x"></i>
+                            </a>
                         </div>
                     </div>
                 </nav>

@@ -1,13 +1,14 @@
 <?php 
 //Display guest welcome message, Login and Registration links
 //when shopper has yet to login,
-$content1 = "Welcome ";
+$content1 = "<nav class='navbar navbar-light bg-warning navbar-expand-xl'>
+<h5 class='navbar-nav mx-auto'>Welcome</h5> 
+</nav>";
 // href='register.php'
-$content2 = "<li class='nav-item'>
-             <a class='nav-link' >Sign Up</a></li>
-             <li class='nav-item'>
-             <a class='nav-link' href='login.php'>Login</a></li>";
-
+$content2 = "<a href='login.php'>
+<button type='button' class='btn btn-outline-info' >Login</button>
+</a>";
+$content3 = "";
 if(isset($_SESSION["ShopperName"])) { 
 //Display a greeting message, Change Password and logout links 
     //after shopper has logged in.
@@ -17,17 +18,14 @@ if(isset($_SESSION["ShopperName"])) {
     else {
         $cartid = "not created";
     }
-    $content1 = "Welcome $_SESSION[ShopperName] ID: $_SESSION[ShopperID] ";//ID:$_SESSION[ShopperID] cartid:$cartid
-    $content2 = "<li class='nav-item'>
-                 <a class='nav-link' href='changePassword.php'>Change Password</a></li>
-                 <li class='nav-item'>
-                 <a class='nav-link' href='logout.php'>Logout</a></li>";
+    $content1 = "<nav class='navbar navbar-light bg-success navbar-expand-xl'><h5 class='navbar-nav mx-auto'>Welcome $_SESSION[ShopperName] ID: $_SESSION[ShopperID] </h5></nav>";
+    $content2 = "<a href='changepassword.php' class='my-auto'><i class='fas fa-user fa-2x'></i></a><a href='logout.php'><button type='button' class='btn btn-outline-danger' >Logout</button></a>";
     
 
-    //Display number of item in cart
-    // if (isset($_SESSION["NumCartItem"])) {
-    //     $content1 .= " $_SESSION[NumCartItem] item(s) in shopping cart";
-    // }
+    // Display number of item in cart
+    if (isset($_SESSION["NumCartItem"])) {
+        $content3 .= " $_SESSION[NumCartItem]";
+    }
 }
 
 ?>
@@ -49,7 +47,7 @@ if(isset($_SESSION["ShopperName"])) {
                 </div>
             </div>
             <div class="container px-0">
-              <nav class="navbar navbar-light bg-white navbar-expand-xl">
+              <nav class="navbar navbar-light bg-secondary navbar-expand-xl">
                 <h5 class="navbar-nav mx-auto"><?php echo $content1 ?></h5>
               </nav>
             </div>
@@ -70,11 +68,9 @@ if(isset($_SESSION["ShopperName"])) {
                             <a href="search.php"><button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" ><i class="fas fa-search text-primary"></i></button></a>
                             <a href="shoppingCart.php" class="position-relative me-4 my-auto">
                                 <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;"><?php echo $_SESSION["NumCartItem"] ?></span>
+                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;"><?php echo $content3 ?></span>
                             </a>
-                            <a href="login.php" class="my-auto">
-                                <i class="fas fa-user fa-2x"></i>
-                            </a>
+                            <?php echo $content2 ?>
                         </div>
                     </div>
                 </nav>

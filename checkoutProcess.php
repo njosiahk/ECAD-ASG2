@@ -58,6 +58,7 @@ if($_POST) //Post Data received from Shopping cart page.
 
 	//TAX CALCULATION
 	// 1. Retrieve current GST rate from the database
+	
 	$stmt = $conn->prepare("SELECT TaxRate FROM GST WHERE GstId = (SELECT MAX(GstId) FROM GST)");
 	$stmt->execute();
 	$stmt->bind_result($gstRate);
@@ -65,7 +66,8 @@ if($_POST) //Post Data received from Shopping cart page.
 	$stmt->close();
 
 	// 2. Calculate tax amount
-	$_SESSION["Tax"] = $_SESSION["SubTotal"] * $gstRate;
+	$_SESSION["Tax"] = $_SESSION["SubTotal"] * $gstRate/100;
+	
 
 
 	//Data to be sent to PayPal
@@ -152,6 +154,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 	if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || 
 	   "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
 	{
+		
 		// Update stock inventory in product table 
 		// after successful checkout
 		foreach ($_SESSION['Items'] as $item) {
@@ -159,12 +162,13 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			$quantityOrdered = $item['quantity'];
 	
 			// Update inventory in the product table
-			$qry = "UPDATE products SET Inventory = Inventory - ? WHERE ProductID = ?";
+			$qry = "UPDATE Product SET Quantity = Quantity - ? WHERE ProductID = ?";
 			$stmt = $conn->prepare($qry);
 			$stmt->bind_param("ii", $quantityOrdered, $productId);
 			$stmt->execute();
 			$stmt->close();
 		}
+		
 	
 		//Update shopcart table, close the shopping cart (OrderPlaced=1)
 		$total = $_SESSION["SubTotal"] + $_SESSION["Tax"] + $_SESSION["ShipCharge"];
@@ -216,6 +220,23 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			
 			// Insert an Order record with shipping information
 			// Get the Order ID and save it in session variable.
+			$qry = "INSERT INTO orderdata (ShipName, ShipAddress, ShipCountry, ShipEmail, ShopCartID)
+			VALUES(?, ?, ?, ?, ?)";
+			$stmt = $conn->prepare($qry);
+			// "i" - integer, "s" - string
+			$stmt->bind_param("ssssi", $ShipName, $ShipAddress, $ShipCountry, $ShipEmail, $_SESSION["Cart"]);
+			$stmt->execute();
+			$stmt->close();
+
+			// Retrieve the inserted order ID
+			$qry = "SELECT LAST_INSERT_ID() AS ORDERID";
+			$result = $conn->query($qry);
+			$row = $result->fetch_array();
+			$_SESSION["OrderID"] = $row["ORDERID"];
+
+			/* previous version
+			// Insert an Order record with shipping information
+			// Get the Order ID and save it in session variable.
 			$qry = "INSERT INTO orderdata (ShipName, ShipAddress, ShipCountry,
 										   ShipEmail, ShopCartID)
 					VALUES(?, ?, ?, ?, ?)";
@@ -229,7 +250,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			$result = $conn->query($qry);
 			$row = $result->fetch_array();
 			$_SESSION["OrderID"] = $row["OrderID"];
-			
+			*/
 				
 			$conn->close();
 				  

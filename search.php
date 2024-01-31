@@ -26,11 +26,41 @@ include("header.php"); // Include the Page Layout header
 
 <?php
 // The non-empty search keyword is sent to server
+include_once("mysql_conn.php"); // Include the PHP file that establishes database connection handle: $conn
 if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
     // To Do (DIY): Retrieve list of product records with "ProductTitle" 
 	// contains the keyword entered by shopper, and display them in a table.
-	
+	$SearchText = "%".$_GET["keywords"]."%";
+     $qry = "select Distinct p.ProductID,p.ProductTitle,p.ProductImage,p.Price,p.Quantity from product p inner join ProductSpec ps on p.ProductID=ps.ProductID where (ProductTitle like ?) or (ProductDesc like ?) or (SpecVal like ?) order by ProductTitle"; // form SQL to select all the catergories
+     $stmt = $conn->prepare($qry);
+        $stmt->bind_param("sss", $SearchText, $SearchText, $SearchText);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        if ($result->num_rows > 0){
+        echo "<table>";
+        while ($row=$result->fetch_assoc()){
+            $product = "productDetails.php?pid=$row[ProductID]";
+            $formattedPrice = number_format($row["Price"], 2);
+            $img = "Images/products/$row[ProductImage]";
+            echo "<tr>";
+            echo "<td><div class='row' style='padding: 5px'>";
+            echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+            echo "Price: <span = 'font-weight:bold;color:red;'> S$$formattedPrice</span>";
+            echo "</div></td>";
+            echo "<td><div class ='col-4'>";
+            echo "<img src='$img'/>";
+            echo "</div>";
+            echo "</td></tr>";
+        }
+        echo "</table>";
+        }
+        else{
+            $text = $_GET["keywords"];
+            echo "<div class='danger'> Unable to find product with the keyword \"$text\".</div>";
+        }
 	// To Do (DIY): End of Code
+
 }
 
 echo "</div>"; // End of container

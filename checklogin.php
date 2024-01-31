@@ -1,5 +1,6 @@
 <?php
 session_start();
+include("header.php");
  $email  = $_POST["email"];
  $pwd = $_POST["password"];
 //  $hased_pass= crypt($pwd,'st');
@@ -42,7 +43,7 @@ if ($result->num_rows > 0)
             $_SESSION["Cart"]=$row2['ShopCartID'];
         }
         $conn->close();
-        header("Location: index.php");
+        echo '<script>window.location.href = "index.php";</script>';
         exit;
     } 
     else 

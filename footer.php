@@ -6,7 +6,7 @@
                 <hr />
                 Do you need help? Please email to
                 <!-- email of the website owner -->
-                <a href="mailto:email@gmail.com">email@gmail.com</a>
+                <a href="mailto:email@gmail.com">lioncitylush@gmail.com</a>
                 <p style="font-size:12px">&copy;Copyright by Lion City Lush</p>
             </div>
         </div>

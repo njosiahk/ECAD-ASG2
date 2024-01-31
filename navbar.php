@@ -1,8 +1,8 @@
 <?php 
 //Display guest welcome message, Login and Registration links
 //when shopper has yet to login,
-$content1 = "<nav class='navbar navbar-light bg-warning navbar-expand-xl'>
-<h5 class='navbar-nav mx-auto'>Welcome</h5> 
+$content1 = "<nav class='navbar navbar-light text-white navbar-expand-xl'>
+<h5 class='navbar-nav mx-auto'>Welcome!</h5> 
 </nav>";
 // href='register.php'
 $content2 = "<a href='login.php'>
@@ -18,8 +18,8 @@ if(isset($_SESSION["ShopperName"])) {
     else {
         $cartid = "not created";
     }
-    $content1 = "<nav class='navbar navbar-light bg-success navbar-expand-xl'><h5 class='navbar-nav mx-auto'>Welcome $_SESSION[ShopperName] ID: $_SESSION[ShopperID] </h5></nav>";
-    $content2 = "<a href='changepassword.php' class='my-auto'><i class='fas fa-user fa-2x'></i></a><a href='logout.php'><button type='button' class='btn btn-outline-danger' >Logout</button></a>";
+    $content1 = "<nav class='navbar navbar-light navbar-expand-xl'><h5 class='navbar-nav mx-auto text-white'>Welcome $_SESSION[ShopperName]!</h5></nav>";
+    $content2 = "<a href='changepassword.php' class='my-auto'><i class='fas fa-user fa-2x'style='color:#50bc84;'></i></a><a href='logout.php'><button type='button' class='btn btn-outline-danger' >Logout</button></a>";
     
 
     // Display number of item in cart
@@ -33,11 +33,11 @@ if(isset($_SESSION["ShopperName"])) {
 
 <header>
 <div class="container-fluid fixed-top">
-            <div class="container topbar bg-primary d-none d-lg-block">
+            <div class="container topbar bg-success d-none d-lg-block">
                 <div class="d-flex justify-content-between">
                     <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">Ngee Ann Polytechnic</a></small>
-                        <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">CityLush@gmail.com</a></small>
+                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-white" ></i> <a href="#" class="text-white">Ngee Ann Polytechnic</a></small>
+                        <small class="me-3"><i class="fas fa-envelope me-2 text-white"></i><a href="#" class="text-white">CityLush@gmail.com</a></small>
                     </div>
                     <div class="top-link pe-2">
                         <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
@@ -54,9 +54,9 @@ if(isset($_SESSION["ShopperName"])) {
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
 
-                    <a href="index.php" class="navbar-brand"><h1 class="text-primary display-6">Lion City Lush</h1></a>
+                    <a href="index.php" class="navbar-brand"><h1 class="text-success display-6">Lion City Lush</h1></a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
+                        <span class="fa fa-bars text-success"></span>
                     </button>
                     
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
@@ -65,9 +65,9 @@ if(isset($_SESSION["ShopperName"])) {
                             <a href="category.php" class="nav-item nav-link">Product Types</a>
                         </div>
                         <div class="d-flex m-3 me-0">
-                            <a href="search.php"><button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" ><i class="fas fa-search text-primary"></i></button></a>
+                            <a href="search.php"><button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" ><i class="fas fa-search"style="color:#50bc84;"></i></button></a>
                             <a href="shoppingCart.php" class="position-relative me-4 my-auto">
-                                <i class="fa fa-shopping-bag fa-2x"></i>
+                                <i class="fa fa-shopping-bag fa-2x" style="color:#50bc84;"></i>
                                 <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;"><?php echo $content3 ?></span>
                             </a>
                             <?php echo $content2 ?>

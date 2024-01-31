@@ -24,6 +24,9 @@ while ($row = $result->fetch_array()) {
     echo "<div class='row' >";
     echo "<div class='col-sm-12' style='padding:5px'>";
     echo "<span class='page-title'>$row[ProductTitle]</span>";
+    if ($row['Quantity'] <= 0) {
+        echo "<span style='color: red;'>Out of Stock</span>";
+    }
     echo "</div>";
     echo "</div>";
 
@@ -56,17 +59,27 @@ while ($row = $result->fetch_array()) {
     $formattedPrice = number_format($row["Price"], 2);
     echo "<p>Price:<span style='font-weight: bold; color: red;'>
           S$formattedPrice</span></p>";
+
+          if ($row['Quantity'] > 0) {
+            echo "<form action='cartFunctions.php' method='post'>";
+            echo "<input type='hidden' name='action' value='add' />";
+            echo "<input type='hidden' name='product_id' value='$pid' />";
+            echo "Quantity: <input type='number' name='quantity' value='1' 
+                             min='1' max='10' style='width:40px' required />";
+            echo "<button type='submit'>Add to Cart</button>";
+            echo "</form>";
+            echo "</div>"; // End of right column
+            echo "</div>"; // End of row
+            }
+            else {
+                echo "<div class='row' >";
+                echo "<div class='col-sm-12' style='padding:5px'>";
+                echo "<span style='color: red;'>Out of Stock</span>";
+                echo "</div>";
+                echo "</div>";
+            }
 }
 
-echo "<form action='cartFunctions.php' method='post'>";
-echo "<input type='hidden' name='action' value='add' />";
-echo "<input type='hidden' name='product_id' value='$pid' />";
-echo "Quantity: <input type='number' name='quantity' value='1' 
-                 min='1' max='10' style='width:40px' required />";
-echo "<button type='submit'>Add to Cart</button>";
-echo "</form>";
-echo "</div>"; // End of right column
-echo "</div>"; // End of row
 
 $conn->close(); // Close database connnection
 echo "</div>"; // End of container

@@ -48,7 +48,7 @@ if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
             echo "Price: <span = 'font-weight:bold;color:red;'> S$$formattedPrice</span>";
             echo "</div></td>";
             echo "<td><div class ='col-4'>";
-            echo "<img src='$img'/>";
+            echo "<img style='max-height:95%; max-width:95%;' src='$img'/>";
             echo "</div>";
             echo "</td></tr>";
         }

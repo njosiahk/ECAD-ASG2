@@ -43,7 +43,7 @@ while ($row = $result->fetch_array()) {
 	//right column - display product image
 	$img = "./Images/Products/$row[ProductImage]";
 	echo "<div class='col-4'>";
-	echo "<img src='$img' />";
+	echo "<img style='max-height:90%; max-width:90%;' src='$img' />";
 	echo "</div>"; // End of right column
 
 	echo "</div>"; // End of row

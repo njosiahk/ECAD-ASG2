@@ -102,7 +102,8 @@ if($_POST) //Post Data received from Shopping cart page.
 		$paypalurl ='https://www'.$paypalmode. 
 		            '.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.
 					$httpParsedResponseAr["TOKEN"].'';
-		header('Location: '.$paypalurl);
+		// header('Location: '.$paypalurl);
+	echo '<script>window.location.href = '.json_encode($paypalurl).';</script>';
 	}
 	else {
 		//Show error message

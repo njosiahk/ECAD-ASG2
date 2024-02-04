@@ -262,7 +262,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			unset($_SESSION["Cart"]);
 			
 			//Redirect shopper to the order confirmed page.
-			header("Location: orderConfirmed.php");
+			echo'<script>window.location.href.="orderConfirmed.php";</script>';
 			exit;
 		} 
 		else 

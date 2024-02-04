@@ -73,7 +73,9 @@ if (isset($_SESSION["Cart"])) {
             $_SESSION["Items"][]=array("productId"=>$row["ProductID"],
                                        "name"=>$row["Name"],
                                        "price"=>$row["Price"],
-                                       "quantity"=>$row["Quantity"]
+                                       "quantity"=>$row["Quantity"],
+
+
         );
             // Accumulate the running sub-total
             $subTotal += $row["Total"];
@@ -94,7 +96,7 @@ if (isset($_SESSION["Cart"])) {
 
         // Add PayPal Checkout button on the shopping cart page
         echo "<form method='post' action='checkoutProcess.php'>";
-        echo "<input type='hidden' name='deliveryOption' value='regular'>"; // store delivery option(default to regular)
+        echo "<input type='hidden' name='deliveryOption' value='regular'>"; // store delivery option
         echo "<input type='image' style='float:right;'src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";
         echo "</form></p>";
                 
